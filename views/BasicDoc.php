@@ -29,17 +29,46 @@ class BasicDoc extends HtmlDoc{
 
     public function show() {
         $this->showHtmlStart();
-        $this->showHeadStart();
-        $this->linkCss();
-        $this->showHeadEnd();
+        $this->showHead();
 
         $this->showHeader();
-        // $this->showBody();
-        // $this->showFooter();
+        
+        $this->showFooter();
         $this->showHtmlEnd();
     }
 
+    protected function showHead() {
+        $this->showHeadStart();
+        $this->linkCss();
+        $this->showHeadEnd();
+    }
 
+    //FOOTER
+    protected function showFooter() {
+        $this->showFooterStart();
+        $this->showFooterContent();
+        $this->showFooterEnd();
+        
+    }
+
+    private function showFooterStart() {
+        echo('<footer>');
+    }
+
+    private function showFooterEnd() {
+        echo('</footer>');
+    }
+
+    private function showFooterContent() {
+        echo('
+            <div>
+                <p> &#169; </p>
+                <p>' . date("Y") . '</p>
+                <p>Tobias The</p>
+            </div>
+        ');
+    }
+    //HEADER
     protected function showHeader() {
         $this->showHeaderStart();
         $this->showHeaderContent();
@@ -112,5 +141,7 @@ class BasicDoc extends HtmlDoc{
     private function linkCss() {
         echo('<link rel="stylesheet" href="./CSS/css.css">');
     }
+
+
 }
 ?>

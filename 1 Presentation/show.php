@@ -134,7 +134,7 @@ function showFooter() {
             &#169;
             <p>' . date("Y") . '</p>
             <p>Tobias The</p>
-        </div
+        </div>
     </footer>
     ');
 }
