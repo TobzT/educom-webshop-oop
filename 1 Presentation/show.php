@@ -130,9 +130,11 @@ function showPageError() {
 function showFooter() {
     echo('
     <footer>
-        &#169;
-        <p>' . date("Y") . '</p>
-        <p>Tobias The</p>
+        <div>
+            &#169;
+            <p>' . date("Y") . '</p>
+            <p>Tobias The</p>
+        </div
     </footer>
     ');
 }
