@@ -5,7 +5,7 @@ class BasicDoc extends HtmlDoc{
 
     protected $page;
     protected $loggedin;
-    private $sideMenuData;
+    protected $sideMenuData;
 
     public function __construct($data) {
         $this->page = $data['page'];
@@ -21,6 +21,10 @@ class BasicDoc extends HtmlDoc{
         } else {
             $this->sideMenuData = array('login' => 'Log In', 'register' => 'Sign Up');
         }
+    }
+
+    protected function getLoggedIn() {
+        return $this->loggedin;
     }
 
     
