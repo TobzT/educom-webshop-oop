@@ -1,6 +1,6 @@
 <?php 
 require_once('../views/HomeDoc.php');
-
-$test = new HomeDoc();
+$data = array('page' => 'home');
+$test = new HomeDoc($data);
 $test->show();
 ?>
