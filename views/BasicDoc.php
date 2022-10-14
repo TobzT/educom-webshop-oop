@@ -7,8 +7,8 @@ class BasicDoc extends HtmlDoc{
     protected $loggedin;
     private $sideMenuData;
 
-    public function __construct($page) {
-        $this->page = $page;
+    public function __construct($data) {
+        $this->page = $data['page'];
 
         if(isset($_SESSION['username'])) {
             $this->loggedin = true;
@@ -23,51 +23,30 @@ class BasicDoc extends HtmlDoc{
         }
     }
 
-    public function getPage() {
-        return $this->page;
-    }
+    
 
-    public function show() {
-        $this->showHtmlStart();
-        $this->showHead();
-
+    protected function showBody() {
+        $this->showBodyStart();
         $this->showHeader();
-        
+        $this->showBodyContent();
         $this->showFooter();
-        $this->showHtmlEnd();
+        $this->showBodyEnd();
     }
 
-    protected function showHead() {
-        $this->showHeadStart();
-        $this->linkCss();
-        $this->showHeadEnd();
+    //BODY
+    private function showBodyStart() {
+        echo('<body> <div class="container">');
     }
 
-    //FOOTER
-    protected function showFooter() {
-        $this->showFooterStart();
-        $this->showFooterContent();
-        $this->showFooterEnd();
-        
+    private function showBodyEnd() {
+        echo('</div> </body>');
     }
 
-    private function showFooterStart() {
-        echo('<footer>');
+    protected function showBodyContent() {
+        //EMPTY
     }
+    
 
-    private function showFooterEnd() {
-        echo('</footer>');
-    }
-
-    private function showFooterContent() {
-        echo('
-            <div>
-                <p> &#169; </p>
-                <p>' . date("Y") . '</p>
-                <p>Tobias The</p>
-            </div>
-        ');
-    }
     //HEADER
     protected function showHeader() {
         $this->showHeaderStart();
@@ -130,16 +109,29 @@ class BasicDoc extends HtmlDoc{
         echo('</header>');
     }
 
-    private function showHeadStart() {
-        echo('<head>');
+    //FOOTER
+    private function showFooter() {
+        $this->showFooterStart();
+        $this->showFooterContent();
+        $this->showFooterEnd();
+        
+    }
+    private function showFooterStart() {
+        echo('<footer>');
     }
 
-    private function showHeadEnd() {
-        echo('</head>');
+    private function showFooterEnd() {
+        echo('</footer>');
     }
 
-    private function linkCss() {
-        echo('<link rel="stylesheet" href="./CSS/css.css">');
+    private function showFooterContent() {
+        echo('
+            <div>
+                <p> &#169; </p>
+                <p>' . date("Y") . '</p>
+                <p>Tobias The</p>
+            </div>
+        ');
     }
 
 
