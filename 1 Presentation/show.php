@@ -57,8 +57,7 @@ function showContent($data) {
     
     switch($data['page']) {
         case "home":
-            showHomeContent();
-            break;
+            $show = new HomeDoc($data);
         case "about":
             showAboutContent();
             break;
@@ -89,7 +88,7 @@ function showContent($data) {
             showConfirmOrder();
             break;
         default:
-            showPageError();
+            $show->show();
     }
 }
 

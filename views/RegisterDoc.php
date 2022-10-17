@@ -1,5 +1,5 @@
 <?php 
-require_once('../views/FormsDoc');
+require_once('../views/FormsDoc.php');
 
 class RegisterDoc extends FormsDoc {
 

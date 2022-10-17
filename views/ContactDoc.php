@@ -1,21 +1,36 @@
 <?php 
-require_once('../views/FormsDoc');
+require_once('../views/FormsDoc.php');
 class ContactDoc extends FormsDoc {
+    
     protected function getData() {
         $data = array('page' => 'contact', "valid" => NULL, 'errors' => array(), 'values' => array());
         $data['meta'] = array(
-            'gender' => array('label' => 'Aanspreeksvorm: ', 'type' => 'dropdown', 'options' => getGenders(), 'validations' => array('notEmpty')),
+            'gender' => array('label' => 'Aanspreeksvorm: ', 'type' => 'dropdown', 'options' => $this->getGenders(), 'validations' => array('notEmpty')),
             'name' => array('label' => 'Name: ', 'type' => 'text', 'validations' => array('onlyLetters', 'notEmpty')),
             'email' => array('label' => 'E-mail', 'type' => 'email', 'validations' => array('validEmail', 'notEmpty')),
             'tlf' => array('label' => 'Telefoon: ', 'type' => 'number', 'validations' => array('onlyNumbers', 'notEmpty')),
-            'radio' => array('label' => 'Communicatievoorkeur: ', 'type' => 'radio', 'options' => getOptions(), 'validations' => array('notEmpty')),
+            'radio' => array('label' => 'Communicatievoorkeur: ', 'type' => 'radio', 'options' => $this->getOptions(), 'validations' => array('notEmpty')),
             'text' => array('label' => '', 'type' => 'textarea', 'validations' => array())
         );
         return $data;
     }
+
+    protected function getGenders() {
+        return array("male" => "Dhr",
+        "female" => "Mvr",
+        "other" => "Anders");
+    }
+
+    protected function getOptions() {
+        return array("tlf" => "Telefoon",
+                "email" => "E-mail");
+    }
+
     protected function showForm() {
         $this->data = $this->getData();
+        // $this->data = $this->validateForm($this->$data);
         $this->showMetaForm($this->data);
+        
         
     }
 
