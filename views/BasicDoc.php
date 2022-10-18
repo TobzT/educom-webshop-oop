@@ -8,23 +8,36 @@ class BasicDoc extends HtmlDoc{
     protected $sideMenuData;
 
     public function __construct($data) {
-        $this->page = $data['page'];
+        $this->setPage($data);
+        $this->setLoggedIn();
+        $this->setSideMenuData();
+    }
 
+    protected function getLoggedIn() {
+        return $this->loggedin;
+    }
+
+    protected function setPage($data) {
+        $this->page = $data['page'];
+        return;
+    }
+
+    protected function setLoggedIn() {
         if(isset($_SESSION['username'])) {
             $this->loggedin = true;
         } else {
             $this->loggedin = false;
         }
-        
-        if($this->loggedin == true) {
+        return;
+    }
+
+    protected function setSideMenuData() {
+        if($this->getLoggedIn()) {
             $this->sideMenuData = array('logout' => 'Log out ' . ucfirst($_SESSION['username']), 'cart' => 'Cart');
         } else {
             $this->sideMenuData = array('login' => 'Log In', 'register' => 'Sign Up');
         }
-    }
-
-    protected function getLoggedIn() {
-        return $this->loggedin;
+        return;
     }
 
     

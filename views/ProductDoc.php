@@ -2,15 +2,14 @@
 require_once('../views/BasicDoc.php');
 abstract class ProductDoc extends BasicDoc {
 
-    abstract function showItems($data);
-    abstract function showItem($data);
-    abstract function startGrid();
+    abstract protected function showItems();
+    abstract protected function showItem($item);
+    protected function startGrid($class) {
+        echo('<div class='.$class.'>');
+    }
+    
     protected function stopGrid() {
         echo('</div>');
     }
-
-    //function startGrid($class) {
-    //echo('<div class="'.$class.'">');
-    //}
 }
 ?>
