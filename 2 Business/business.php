@@ -464,7 +464,7 @@ function showCart() {
     closeDb($conn);
     $itemArray = sortWebshopResults($result);
     foreach($_SESSION['cart'] as $id => $count) {
-        $total += cartLine($conn, $itemArray, $id, $count);
+        $total += cartLine($itemArray, $id, $count);
     }
     stopGrid();
     startGrid('cartGrid');
@@ -478,7 +478,7 @@ function showCart() {
     
 }
 
-function cartLine($conn, $itemArray, $id, $count) {
+function cartLine($itemArray, $id, $count) {
     if($count > 0){
         startCartLine();
         showCartItem('image', $id, $itemArray[$id]['path'], true);

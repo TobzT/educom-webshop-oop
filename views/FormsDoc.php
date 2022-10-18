@@ -1,16 +1,23 @@
 <?php 
 require_once('../views/BasicDoc.php');
-abstract class FormsDoc extends BasicDoc {
-    protected $page;
-    protected $data;
+class FormsDoc extends BasicDoc {
+    
 
     protected function showBodyContent() {
-        $this->showForm();
+        $this->showMetaForm();
     }
 
-    abstract protected function showForm();
-    abstract protected function getData();
-    abstract protected function showMetaForm($data);
+
+    protected function showMetaForm(){
+        $this->showFormStart();
+        $data = $this->data;
+        // var_dump($data);
+        foreach(array_keys($data['meta']) as $key){
+            $meta = $data['meta'][$key];
+            $this->showMetaFormItem($key, $data, $meta);
+        }
+        $this->showFormEnd($data['page'], $data['SubmitLabel']);
+    }
     
 
     protected function showFormStart(){
@@ -20,6 +27,7 @@ abstract class FormsDoc extends BasicDoc {
         echo('<input type="hidden" name="page" value="'.$page.'">');
         echo('<button type="submit">'.$submitText.'</button></form>');
     }
+
     protected function repeatingForm($options, $value) {
     
         $count = count($options);

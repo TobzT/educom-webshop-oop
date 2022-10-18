@@ -40,7 +40,7 @@ class HtmlDoc {
 
 
     protected function showBody() {
-        
+        echo("Hello world!");
     }
 
 }

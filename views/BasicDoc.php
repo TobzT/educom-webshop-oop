@@ -3,32 +3,36 @@ require_once('../views/HtmlDoc.php');
 
 class BasicDoc extends HtmlDoc{
 
+    protected $data;
     protected $page;
-    protected $loggedin;
+    protected $menuData;
     protected $sideMenuData;
 
     public function __construct($data) {
-        $this->setPage($data);
-        $this->setLoggedIn();
-        $this->setSideMenuData();
+        $this->setData($data);
+        $this->setPage();
+        $this->setMenuDatas();
     }
 
-    protected function getLoggedIn() {
-        return $this->loggedin;
+    private function setData($data) {
+        $this->data = $data;
     }
 
-    protected function setPage($data) {
-        $this->page = $data['page'];
-        return;
+    private function setPage() {
+        $this->page = $this->data['page'];
     }
 
-    protected function setLoggedIn() {
+    private function setMenuDatas() {
+        $this->menuData = $this->data['menu'];
+        $this->sideMenuData = $this->data['sideMenu'];
+    }
+
+/*    protected function setLoggedIn() {
         if(isset($_SESSION['username'])) {
             $this->loggedin = true;
         } else {
             $this->loggedin = false;
         }
-        return;
     }
 
     protected function setSideMenuData() {
@@ -37,15 +41,15 @@ class BasicDoc extends HtmlDoc{
         } else {
             $this->sideMenuData = array('login' => 'Log In', 'register' => 'Sign Up');
         }
-        return;
     }
-
-    
+*/    
 
     protected function showBody() {
         $this->showBodyStart();
         $this->showHeader();
+        $this->showBodyContentStart();
         $this->showBodyContent();
+        $this->showBodyContentEnd();
         $this->showFooter();
         $this->showBodyEnd();
     }
@@ -59,8 +63,16 @@ class BasicDoc extends HtmlDoc{
         echo('</div> </body>');
     }
 
+    private function showBodyContentStart() {
+        echo('<div class="body">');
+    }
+
+    private function showBodyContentEnd() {
+        echo('</div>');
+    }
+
     protected function showBodyContent() {
-        //EMPTY
+        echo("Hallo World");
     }
     
 
@@ -103,10 +115,10 @@ class BasicDoc extends HtmlDoc{
         $this->startMenuList();
         
 
-        $this->showMenuItem('index.php?page=home', 'HOME');
-        $this->showMenuItem('index.php?page=about', 'ABOUT');
-        $this->showMenuItem('index.php?page=contact', 'CONTACT');
-        $this->showMenuItem('index.php?page=webshop', 'WEBSHOP');
+        foreach($this->menuData as $key => $value){
+            $this->showMenuItem('index.php?page=' . $key, $value);
+        }
+        
         
         $this->stopMenuList();
     }

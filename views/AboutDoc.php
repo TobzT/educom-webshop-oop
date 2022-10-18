@@ -4,7 +4,7 @@ class AboutDoc extends BasicDoc {
 
     protected function showBodyContent() {
         echo('
-        <div class="body">
+        
             <p>My name is Tobias, and I am building this website right now. <br>
                 I am planning on making this a bigger project, but everyone has to start somewhere.
             </p>
@@ -20,7 +20,7 @@ class AboutDoc extends BasicDoc {
             </p>
 
             <p>If you have any questions, go over to the contact page. You can find information there.</p>
-        </div>
+        
         ');
     }
 }

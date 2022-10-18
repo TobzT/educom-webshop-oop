@@ -7,19 +7,13 @@ class WebshopDoc extends ProductDoc {
     protected $items;
 
     public function __construct($data) {
-        $this->setPage($data);
-        $this->setItems($data);
-        $this->setLoggedIn();
-        $this->setSideMenuData();
-        
+        PARENT::__construct($data);
+        $this->setItems();        
     }
 
-    private function setItems($data) {
-        $this->items = $data['items'];
-        return;
+    private function setItems() {
+        $this->items = $this->data['items'];
     }
-    
-
 
     protected function showItems() {
         
