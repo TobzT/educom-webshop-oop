@@ -92,13 +92,7 @@ class CartDoc extends ProductDoc {
         $this->stopCartLine();
     }
 
-    private function sortWebshopResults($results) {
-        $output = [];
-        foreach($results as $line) {
-            $output[$line[0]] = ['name' => $line[1], 'price' => $line[2], 'desc' => $line[3], 'path' => $line[4]];
-        }
-        return $output;
-    }
+    
 
     private function showCountForm($count, $id) {
         $html = '
