@@ -1,13 +1,17 @@
 <?php 
-include_once("./views/FormsDoc.php");
-class ContactThanksDoc extends FormsDoc {
+include_once("./views/BasicDoc.php");
+class ContactThanksDoc extends BasicDoc {
 
     protected function showBodyContent() {
         $genders = getGenders();
         $options = getOptions();
+        $pronoun = $genders[$this->data['values']['gender']];
+        if($pronoun == 'Anders') {
+            $pronoun = "";
+        }
         echo(
             '<p class="body">
-                Dankjewel ' . $genders[$this->data['values']['gender']] . " " . ucfirst($this->data['values']['name']) . '! <br> <br>
+                Dankjewel ' . $pronoun . " " . ucfirst($this->data['values']['name']) . '! <br> <br>
 
                 Jouw e-mail adres is ' . $this->data['values']["email"] . '. <br>
                 Jouw telefoonnummer is ' . $this->data['values']["tlf"] . '. <br>

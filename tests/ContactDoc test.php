@@ -1,5 +1,5 @@
 <?php 
-require_once('../views/ContactDoc.php');
+require_once('../views/FormsDoc.php');
 
 $data = array(
     'page' => 'contact', 
