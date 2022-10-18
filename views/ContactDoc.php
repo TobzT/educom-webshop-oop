@@ -26,16 +26,9 @@ class ContactDoc extends FormsDoc {
                 "email" => "E-mail");
     }
 
-    protected function showForm() {
-        $this->data = $this->getData();
-        // $this->data = $this->validateForm($this->$data);
-        $this->showMetaForm($this->data);
-        
-        
-    }
 
-    protected function showMetaForm($data) {
-
+    protected function showMetaForm() {
+        $data = $this->data;
         $this->showFormStart();
         // var_dump($data);
         foreach(array_keys($data['meta']) as $key){

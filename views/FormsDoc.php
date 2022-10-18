@@ -16,7 +16,7 @@ class FormsDoc extends BasicDoc {
             $meta = $data['meta'][$key];
             $this->showMetaFormItem($key, $data, $meta);
         }
-        $this->showFormEnd($data['page'], $data['SubmitLabel']);
+        $this->showFormEnd($data['page'], $data['submitLabel']);
     }
     
 
