@@ -7,6 +7,17 @@
 include_once("./1 Presentation/show.php");
 include_once("./2 Business/business.php");
 include_once("./3 Data/data.php");
+
+include_once("./views/AboutDoc.php");
+include_once("./views/BasicDoc.php");
+include_once("./views/CartDoc.php");
+include_once("./views/DetailDoc.php");
+include_once("./views/FormsDoc.php");
+include_once("./views/HomeDoc.php");
+include_once("./views/HtmlDoc.php");
+include_once("./views/ProductDoc.php");
+include_once("./views/WebshopDoc.php");
+include_once("./views/ContactThanksDoc.php");
 // includeOnceDir("./1 Presentation/");
 // includeOnceDir("./2 Business/");
 // includeOnceDir("./3 Data/");
@@ -37,6 +48,7 @@ function processRequest($page){
             if($data['valid']){
                 $page = 'thanks';
             }
+            $data['submitLabel'] = 'Submit';
             break;
         case 'login':
             $data = getData('login');
@@ -46,6 +58,7 @@ function processRequest($page){
                 doLogin($data);
                 $page = 'home';
             }
+            $data['submitLabel'] = 'Log in';
             break;
 
         case 'logout':
@@ -61,6 +74,7 @@ function processRequest($page){
                 closeDb($conn);
                 $page = 'login';
             }
+            $data['submitLabel'] = 'Sign up';
             break;
         case 'details':
             $id = getVarFromArray($_GET, 'id', NULL);
@@ -80,6 +94,7 @@ function processRequest($page){
                         }
                         $page = 'details';
                         $_GET['id'] = $id;
+                        $data['id'] = $id;
                         break;
                     case "remove":
                         $_SESSION['cart'][$id] = 0;
@@ -149,8 +164,37 @@ function processRequest($page){
 }
 
 function showResponsePage($data) {
-    beginDocument();
-    showHead();
-    showBody($data);
-    endDocument();
+    switch($data['page']) {
+        case "home":
+            $view = new HomeDoc($data);
+            break;
+        case "about":
+            $view = new AboutDoc($data);
+            break;
+        case "contact":
+            $view = new FormsDoc($data);
+            break;
+        case "webshop":
+            $view = new WebshopDoc($data);
+            break;
+        case "login":
+            $view = new FormsDoc($data);
+            break;
+        case "register":
+            $view = new FormsDoc($data);
+            break;
+        case "cart":
+            $view = new CartDoc($data);
+            break;
+        case "details":
+            $view = new DetailDoc($data);
+            break;
+        case "thanks":
+            $view = new ContactThanksDoc($data);
+            break;
+        default:
+            $view = new HomeDoc($data);
+            break;   
+    }
+    $view->show(); 
 }

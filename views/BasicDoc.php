@@ -1,5 +1,5 @@
 <?php 
-require_once('../views/HtmlDoc.php');
+require_once('./views/HtmlDoc.php');
 
 class BasicDoc extends HtmlDoc{
 

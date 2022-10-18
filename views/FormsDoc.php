@@ -1,5 +1,5 @@
 <?php 
-require_once('../views/BasicDoc.php');
+require_once('./views/BasicDoc.php');
 class FormsDoc extends BasicDoc {
     
 
@@ -98,6 +98,17 @@ class FormsDoc extends BasicDoc {
                 break;
         }
         echo('</div><br>');
+    }
+
+    protected function getGenders() {
+        return array("male" => "Dhr",
+                "female" => "Mvr",
+                "other" => "Anders"); 
+    }
+
+    protected function getOptions() {
+        return array("tlf" => "Telefoon",
+                "email" => "E-mail");
     }
 
 }
