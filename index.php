@@ -11,6 +11,7 @@ include_once("./3 Data/data.php");
 include_once("./views/AboutDoc.php");
 include_once("./views/BasicDoc.php");
 include_once("./views/CartDoc.php");
+include_once("./views/EmptyCartDoc.php");
 include_once("./views/DetailDoc.php");
 include_once("./views/FormsDoc.php");
 include_once("./views/HomeDoc.php");
@@ -78,14 +79,31 @@ function processRequest($page){
             break;
         case 'details':
             $id = getVarFromArray($_GET, 'id', NULL);
+            $conn = openDb();
+            $data['items'] = getItemFromDb($conn, $id);
+            closeDb($conn);
             $data['id'] = $id;
             break;
         case "confirmOrder":
             showConfirmOrder();
+            break;
+        case 'webshop':
+            $conn = openDb();
+            if($_SERVER["REQUEST_METHOD"] == "POST")
+            {
+                $id = getVarFromArray($_POST, 'id', NULL);
+                $count = 1;
+                addToCart($id, $count);
+            }
+            $data['items'] = getAllItemsFromDb($conn);
+            closeDb($conn);
+            break;
         case 'cart':
             if($_SERVER["REQUEST_METHOD"] == "POST") {
+                
                 $type = getVarFromArray($_POST, 'type', NULL);
                 $id = getVarFromArray($_POST, 'id', NULL);
+                
                 switch($type) {
                     case "details":
                         $count = getVarFromArray($_POST, 'count', 0);
@@ -137,12 +155,29 @@ function processRequest($page){
                         cleanCart();
                         closeDb($conn);
                         $page = 'confirmOrder';
-
-
-                    
-                    
+                        break;
                 }
+                if(!checkCart()) {
+                    $page = 'emptyCart';
+                    break;
+                }
+                $ids = array_keys($_SESSION['cart']);
+                $conn = openDb();
+                    
+                $data['items'] = getItemsFromDb($conn, $ids);
+                closeDb($conn);
             
+
+            } else {
+                if(!checkCart()) {
+                    $page = 'emptyCart';
+                    break;
+                }
+                $ids = array_keys($_SESSION['cart']);
+                $conn = openDb();
+                    
+                $data['items'] = getItemsFromDb($conn, $ids);
+                closeDb($conn);
 
             }
         
@@ -191,6 +226,9 @@ function showResponsePage($data) {
             break;
         case "thanks":
             $view = new ContactThanksDoc($data);
+            break;
+        case "emptyCart":
+            $view = new EmptyCartDoc($data);
             break;
         default:
             $view = new HomeDoc($data);

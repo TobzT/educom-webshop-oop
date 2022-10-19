@@ -229,6 +229,7 @@ function checkCart() {
     return $check;
 }
 
+
 //REGISTER
 
 function registerUser($conn, $data) {

@@ -36,7 +36,7 @@ class WebshopDoc extends ProductDoc {
                     <input type="hidden" name="id" value="'.$item[0].'">
                     <input type="hidden" name="type" value="webshop">
                     <input type="hidden" name="count" value="1">
-                    <input type="hidden" name="page" value="cart">
+                    <input type="hidden" name="page" value="webshop">
                     <button id="details" type="submit">add to cart </button></form>';
         $button = $this->showShopItemComp('shopButton', $this->showDiv('center', 'fillbox', $button_1));
         $this->startGrid('shopItem');
