@@ -23,6 +23,7 @@ class FormsDoc extends BasicDoc {
     protected function showFormStart(){
         echo('<form action="index.php" method="post" class="body">');
     }
+    
     protected function ShowFormEnd($page, $submitText) {
         echo('<input type="hidden" name="page" value="'.$page.'">');
         echo('<button type="submit">'.$submitText.'</button></form>');
