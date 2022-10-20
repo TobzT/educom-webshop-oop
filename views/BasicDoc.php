@@ -1,48 +1,29 @@
 <?php 
-require_once('./views/HtmlDoc.php');
+require_once('../views/HtmlDoc.php');
 
 class BasicDoc extends HtmlDoc{
 
-    protected $data;
+    protected $model;
     protected $page;
     protected $menuData;
     protected $sideMenuData;
 
-    public function __construct($data) {
-        $this->setData($data);
+    public function __construct($model) {
+        $this->model = $model;
         $this->setPage();
         $this->setMenuDatas();
     }
 
-    private function setData($data) {
-        $this->data = $data;
-    }
 
     private function setPage() {
-        $this->page = $this->data['page'];
+        $this->page = $this->model->getPage();
     }
 
     private function setMenuDatas() {
-        $this->menuData = $this->data['menu'];
-        $this->sideMenuData = $this->data['sideMenu'];
+        $this->menuData = $this->model->getMenu();
+        $this->sideMenuData = $this->model->getSideMenu();
     }
 
-/*    protected function setLoggedIn() {
-        if(isset($_SESSION['username'])) {
-            $this->loggedin = true;
-        } else {
-            $this->loggedin = false;
-        }
-    }
-
-    protected function setSideMenuData() {
-        if($this->getLoggedIn()) {
-            $this->sideMenuData = array('logout' => 'Log out ' . ucfirst($_SESSION['username']), 'cart' => 'Cart');
-        } else {
-            $this->sideMenuData = array('login' => 'Log In', 'register' => 'Sign Up');
-        }
-    }
-*/    
 
     protected function showBody() {
         $this->showBodyStart();
