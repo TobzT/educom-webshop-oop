@@ -8,29 +8,38 @@ include_once("./1 Presentation/show.php");
 include_once("./2 Business/business.php");
 include_once("./3 Data/data.php");
 
-include_once("./views/AboutDoc.php");
-include_once("./views/BasicDoc.php");
-include_once("./views/CartDoc.php");
-include_once("./views/EmptyCartDoc.php");
-include_once("./views/DetailDoc.php");
-include_once("./views/FormsDoc.php");
-include_once("./views/HomeDoc.php");
-include_once("./views/HtmlDoc.php");
-include_once("./views/ProductDoc.php");
-include_once("./views/WebshopDoc.php");
-include_once("./views/ContactThanksDoc.php");
+include_once("./controllers/PageController.php");
+include_once("./models/PageModel.php");
+
+// include_once("./views/AboutDoc.php");
+// include_once("./views/BasicDoc.php");
+// include_once("./views/CartDoc.php");
+// include_once("./views/EmptyCartDoc.php");
+// include_once("./views/DetailDoc.php");
+// include_once("./views/FormsDoc.php");
+// include_once("./views/HomeDoc.php");
+// include_once("./views/HtmlDoc.php");
+// include_once("./views/ProductDoc.php");
+// include_once("./views/WebshopDoc.php");
+// include_once("./views/ContactThanksDoc.php");
 // includeOnceDir("./1 Presentation/");
 // includeOnceDir("./2 Business/");
 // includeOnceDir("./3 Data/");
+define ("USE_MVC", true);
 
 session_start();
 date_default_timezone_set('CET');
 session_check();
 // var_dump($_SESSION);
-$page = getRequestedPage();
-$data = processRequest($page);
-showResponsePage($data);
-
+if (USE_MVC) {
+    $model = new PageModel();
+    $controller = new PageController($model);
+    $controller->handleRequest();
+} else {
+    $page = getRequestedPage();
+    $data = processRequest($page);
+    showResponsePage($data);
+}
 function getRequestedPage() {
     $request_type = $_SERVER["REQUEST_METHOD"];
     if ($request_type == "GET") {
@@ -53,7 +62,6 @@ function processRequest($page){
             break;
         case 'login':
             $data = getData('login');
-            // var_dump($data);
             $data = validateForm($data);
             if($data['valid']) {
                 doLogin($data);

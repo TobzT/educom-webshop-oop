@@ -1,5 +1,5 @@
 <?php 
-include_once('../views/BasicDoc.php');
+include_once('./views/BasicDoc.php');
 class AboutDoc extends BasicDoc {
 
     protected function showBodyContent() {

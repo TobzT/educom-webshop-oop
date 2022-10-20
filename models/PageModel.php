@@ -1,5 +1,5 @@
 <?php 
-include_once('../models/SessionManager.php');
+include_once('./models/SessionManager.php');
 class PageModel {
 
     protected $page;
@@ -9,24 +9,23 @@ class PageModel {
     protected $errors = array();
     protected $sessionManager;
 
-    public function __construct() {
-        $this->getRequestedPage();
-    }
+    // public function __construct() {
+    //     $this->getRequestedPage();
+    // }
 
     public function getRequestedPage() {
         $this->sessionManager = new SessionManager();
         $request_type = $_SERVER["REQUEST_METHOD"];
+        
         $this->isPost = $request_type == "POST";
     
-        if ($this->isPost == "GET") {
-            $this->page =  $this->getVarFromArray($_GET, 'page', 'home');
-        } else {
+        if ($this->isPost) {
             $this->page =  $this->getVarFromArray($_POST, 'page', 'home');
+        } else {
+            $this->page =  $this->getVarFromArray($_GET, 'page', 'home');
         }
 
         $this->createMenuArr();
-
-
 
     }
 
