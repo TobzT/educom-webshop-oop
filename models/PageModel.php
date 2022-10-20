@@ -1,14 +1,17 @@
 <?php 
-include_once('./models/SessionManager.php');
+include_once('../models/SessionManager.php');
 class PageModel {
 
     protected $page;
     protected $isPost;
-    protected $menu;
-    protected $sideMenu;
+    protected $menu = array();
+    protected $sideMenu = array();
     protected $errors = array();
     protected $sessionManager;
 
+    public function __construct() {
+        $this->getRequestedPage();
+    }
 
     public function getRequestedPage() {
         $this->sessionManager = new SessionManager();

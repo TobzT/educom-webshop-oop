@@ -53,7 +53,7 @@ class BasicDoc extends HtmlDoc{
     }
 
     protected function showBodyContent() {
-        echo("Hallo World");
+        echo("Hello World!");
     }
     
 
@@ -84,7 +84,7 @@ class BasicDoc extends HtmlDoc{
         foreach($this->sideMenuData as $key => $value) {
             $this->showSideMenuItem('index.php?page='.$key, $value);
             echo '<br>';
-    }
+        }
     echo '</div>';
     }
 

@@ -33,7 +33,7 @@ class HtmlDoc {
     }
 
     private function linkCss() {
-        echo('<link rel="stylesheet" href="./css/css.css">');
+        echo('<link rel="stylesheet" href="../css/css.css">');
     }
 
     
