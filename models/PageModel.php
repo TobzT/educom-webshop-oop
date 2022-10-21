@@ -6,7 +6,6 @@ class PageModel {
     protected $isPost;
     protected $menu = array();
     protected $sideMenu = array();
-    protected $errors = array();
     protected $sessionManager;
 
     // public function __construct() {

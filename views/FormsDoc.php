@@ -3,6 +3,7 @@ require_once('./views/BasicDoc.php');
 class FormsDoc extends BasicDoc {
     
 
+
     protected function showBodyContent() {
         $this->showMetaForm();
     }
@@ -10,13 +11,14 @@ class FormsDoc extends BasicDoc {
 
     protected function showMetaForm(){
         $this->showFormStart();
-        $data = $this->data;
-        // var_dump($data);
-        foreach(array_keys($data['meta']) as $key){
-            $meta = $data['meta'][$key];
-            $this->showMetaFormItem($key, $data, $meta);
+        $array = $this->model->getMeta();
+        $this->values = $this->model->getValues();
+        $this->errors = $this->model->getErrors();
+        foreach(array_keys($array) as $key){
+            $meta = $array[$key];
+            $this->showMetaFormItem($key, $meta);
         }
-        $this->showFormEnd($data['page'], $data['submitLabel']);
+        $this->showFormEnd($this->model->getPage(), $this->model->getSubmitlabel());
     }
     
 
@@ -48,17 +50,17 @@ class FormsDoc extends BasicDoc {
         }
         
     }
-    protected function showMetaFormItem($key, $data, $meta) {
+    protected function showMetaFormItem($key, $meta) {
         echo('<div>
             <label for="'.$key.'">'.$meta['label'].'</label>'
         );
     
-        if(empty($data['values'][$key])) {
-            $data['values'][$key] = '';
+        if(empty($this->values[$key])) {
+            $this->values[$key] = '';
         }
     
-        if(empty($data['errors'][$key])) {
-            $data['errors'][$key] = '';
+        if(empty($this->errors[$key])) {
+            $this->errors[$key] = '';
         }
     
         switch ($meta['type']) {
@@ -66,17 +68,17 @@ class FormsDoc extends BasicDoc {
                 echo('
                         <select name="'.$key.'" id="'.$key.'" >');
     
-                echo($this->repeatingForm($meta['options'], $data['values'][$key]));
+                echo($this->repeatingForm($meta['options'], $this->values[$key]));
     
                 echo('</select>');
                 break;
             
             case "radio":
                 echo('
-                    <p><h3 class="error"> '. $data['errors'][$key] .'</h3></p>
+                    <p><h3 class="error"> '. $this->errors[$key] .'</h3></p>
                 ');
     
-                echo($this->repeatingRadio($meta['options'], $data['values'][$key], $key));
+                echo($this->repeatingRadio($meta['options'], $this->values[$key], $key));
     
                 break;
             
@@ -91,9 +93,9 @@ class FormsDoc extends BasicDoc {
             
             default:
                 echo('
-                        <input class="input" type="'.$meta['type'].'" id="'.$key.'" name="'.$key.'" value="'. $data['values'][$key] .'">
+                        <input class="input" type="'.$meta['type'].'" id="'.$key.'" name="'.$key.'" value="'. $this->values[$key] .'">
                         
-                        <h3 class="error">'.$data['errors'][$key] .'</h3>
+                        <h3 class="error">'.$this->errors[$key] . '</h3>
                     
                 ');
                 break;

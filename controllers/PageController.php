@@ -3,6 +3,7 @@
 class PageController {
 
     private $model;
+    private $view;
 
     public function __construct($model) {
         $this->model = $model;
@@ -31,7 +32,20 @@ class PageController {
                 include_once('./views/AboutDoc.php');
                 $view = new AboutDoc($this->model);
                 break;
+
+            case 'contact' Or 'login' Or 'register':
+                include_once('./views/FormsDoc.php');
+                include_once('./models/UserModel.php');
+                $this->model = new UserModel();
+                $this->getRequest();
+                $view = new FormsDoc($this->model);
+                
+                break;
             }
+
+            
+                
+
         $view->show();
     }
 }
