@@ -57,6 +57,10 @@ class UserModel extends PageModel {
         return $this->errors;
     }
 
+    public function getValid() {
+        return $this->valid;
+    }
+
 
 
 

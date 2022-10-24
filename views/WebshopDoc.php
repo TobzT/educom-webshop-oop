@@ -6,13 +6,13 @@ class WebshopDoc extends ProductDoc {
     protected $model;
     protected $items;
 
-    public function __construct($data) {
-        PARENT::__construct($data);
+    public function __construct($model) {
+        PARENT::__construct($model);
         $this->setItems();        
     }
 
     private function setItems() {
-        $this->items = $this->data['items'];
+        $this->items = $this->model->getItems();
     }
 
     protected function showItems() {

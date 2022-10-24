@@ -120,7 +120,7 @@ function processRequest($page){
                         }
                         $page = 'details';
                         $_GET['id'] = $id;
-                        $data['id'] = $id;
+                        
                         break;
                     case "remove":
                         $_SESSION['cart'][$id] = 0;

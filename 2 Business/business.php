@@ -325,14 +325,7 @@ function showItem($item) {
 
 }
 
-
-
-
-
-
-
-
-
+// DETAILS
 function showDetails($data) {
     $id = $data['id'];
     $conn = openDb();
@@ -510,7 +503,7 @@ function addToCart($id, $count) {
 function sortWebshopResults($results) {
     $output = [];
     foreach($results as $line) {
-        $output[$line[0]] = ['name' => $line[1], 'price' => $line[2], 'desc' => $line[3], 'path' => $line[4]];
+        $output[$line[0]] = ['id' => $line[0], 'name' => $line[1], 'price' => $line[2], 'desc' => $line[3], 'path' => $line[4]];
     }
     return $output;
 }

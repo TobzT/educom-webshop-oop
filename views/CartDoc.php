@@ -4,7 +4,7 @@ require_once('./views/ProductDoc.php');
 class CartDoc extends ProductDoc {
 
     private function showCart() {
-        $items = $this->data['items'];
+        $items = $this->model->getItems();
         $total = 0;
         $this->startGrid('cartGrid');
         $this->showCartHeaders();
