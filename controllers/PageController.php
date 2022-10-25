@@ -11,7 +11,9 @@ class PageController {
 
     public function handleRequest() {
         $this->getRequest();
-        // $this->processRequest();
+        // if($this->model->getIsPost()){
+            $this->processRequest();
+        // }
         $this->showPage();
     }
 
@@ -20,8 +22,46 @@ class PageController {
     }
 
     private function processRequest() {
+        $this->session_check();
 
+        switch($this->model->getPage()) {
+            case "login":
+                include_once('./models/UserModel.php');
+                $this->model = new UserModel($this->model);
+                $this->model->validateForm();
+                if($this->model->getValid()) {
+                    $this->model->doLogin();
+                    $this->model->refreshMenu();
+                    $this->model->setPage('home');
+                }
+                break;
+            
+            case "register":
+                include_once('./models/UserModel.php');
+                $this->model = new UserModel($this->model);
+                $this->model->validateForm();
+                if($this->model->getValid()) {
+                    $this->model->registerUser();
+                    $this->model->setPage('login');
+                }
+                break;
+
+            case "contact":
+                include_once('./models/UserModel.php');
+                $this->model = new UserModel($this->model);
+                $this->model->validateForm();
+                if($this->model->getValid()){
+                    $this->model->setPage('contactThanks');
+                }
+                break;
+            
+            case 'contactThanks':
+                print_r('hello world');
+                break;
+        }
     }
+
+    
 
     private function showPage() {
         // $page = getVarFromArray($_GET, 'page', 'home');
@@ -40,26 +80,15 @@ class PageController {
 
             case 'contact':
                 include_once('./views/FormsDoc.php');
-                include_once('./models/UserModel.php');
-                $this->model = new UserModel($this->model);
-                $this->getRequest();
                 $view = new FormsDoc($this->model);
                 break;
 
+            case 'contactThanks':
+                include_once('./views/ContactThanksDoc.php');
+                $view = new ContactThanksDoc($this->model);
+                break;
+
             case 'login':
-                include_once('./models/UserModel.php');
-                $this->model = new UserModel($this->model);
-                $this->getRequest();
-                if($this->model->getIsPost()) {
-                    if($this->model->getValid()) {
-                        $this->model->doLogin();
-                        $this->getRequest();
-                        $this->model->setPage('home');
-                        include_once('./views/HomeDoc.php');
-                        $view = new HomeDoc($this->model);
-                        break;
-                    }
-                }
                 include_once('./views/FormsDoc.php');
                 $view = new FormsDoc($this->model);
                 break;
@@ -77,20 +106,20 @@ class PageController {
                 include_once('./models/UserModel.php');
                 $this->model = new UserModel($this->model);
                 $this->getRequest();
-                if($this->model->getIsPost()) {
-                    if($this->model->getValid()) {
-                        $name = getVarFromArray($_POST, 'name', NULL);
-                        $email = getVarFromArray($_POST, 'email', NULL);
-                        $pw = getVarFromArray($_POST, 'pw', NULL);
-                        if($name !== NULL && $email !== NULL && $pw !== NULL) {
-                            $conn = openDb();
-                            saveInDb($conn, $email, $name, $pw);
-                            closeDb($conn);
-                        }
-                        $_POST['page'] = 'login';
-                        $this->getRequest();
-                    }
-                }
+                // if($this->model->getIsPost()) {
+                //     if($this->model->getValid()) {
+                //         $name = getVarFromArray($_POST, 'name', NULL);
+                //         $email = getVarFromArray($_POST, 'email', NULL);
+                //         $pw = getVarFromArray($_POST, 'pw', NULL);
+                //         if($name !== NULL && $email !== NULL && $pw !== NULL) {
+                //             $conn = openDb();
+                //             saveInDb($conn, $email, $name, $pw);
+                //             closeDb($conn);
+                //         }
+                //         $_POST['page'] = 'login';
+                //         $this->getRequest();
+                //     }
+                // }
                 
                 $view = new FormsDoc($this->model);
                 break;
@@ -192,6 +221,26 @@ class PageController {
                 $view->show();
             }
         
+            private function session_check() {
+                if ($_SESSION['lastUsed'] !== NULL){
+                    $currentDate = explode("-", date('Y:m:t-H:m:s'));
+                    $currentTime = $currentDate[1];
+                    $currentDay = $currentDate[0];
+                    $lastDate = explode("-", $_SESSION['lastUsed']);
+                    $lastTime = $lastDate[1];
+                    $lastDay = $lastDate[0];
+                    if ($currentDay !== $lastDay) {
+                        doLogout();
+                        return;
+                    } elseif(checkTimeout($currentTime, $lastTime)) {
+                        doLogout();
+                        return;
+                    }
+                } else {
+                    doLogout();
+                    return;
+                }
+            }
 }
 
         

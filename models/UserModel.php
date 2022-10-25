@@ -8,10 +8,11 @@ class UserModel extends PageModel {
     protected $meta = array();
     protected $errors = array();
     protected $values = array();
-    protected $valid = true;
+    protected $valid = false;
 
     public function __construct($copy) {
         PARENT::__construct($copy);
+        $this->setMetaData();
     }
 
     public function getRequestedPage() {
@@ -103,18 +104,18 @@ class UserModel extends PageModel {
         }
     }
 
-    private function validateForm() {
+    public function validateForm() {
         if($_SERVER["REQUEST_METHOD"] == "POST") {
             $this->valid = true;
             $this->errors = NULL;
             foreach($this->meta as $key => $metaArray) {
                 
                 $this->values[$key] = test_inputs(getVarFromArray($_POST, $key));
-                $data = $this->validateField($key);
+                $this->validateField($key);
             }
         }
     
-        return $data;
+        
     }
 
     private function validateField($key) {

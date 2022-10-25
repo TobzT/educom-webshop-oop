@@ -36,6 +36,7 @@ class PageModel {
 
     }
 
+
     public function getPage() {
         return $this->page;
     }
@@ -59,6 +60,12 @@ class PageModel {
     public function getSessionManager() {
         return $this->sessionManager;
     }
+
+    public function refreshMenu() {
+        return $this->createMenuArr();
+    }
+
+    
 
     protected function createMenuArr() {
         $this->menu = array('home' => 'HOME', 'about' => 'ABOUT', 'contact' => 'CONTACT', 'webshop' => "WEBSHOP");
@@ -90,6 +97,18 @@ class PageModel {
         $_SESSION['username'] = NULL;
         $_SESSION['lastUsed'] = NULL;
         $_SESSION['cart'] = NULL;
+    }
+
+    public function registerUser() {
+        
+        $name = getVarFromArray($_POST, 'name', NULL);
+        $email = getVarFromArray($_POST, 'email', NULL);
+        $pw = getVarFromArray($_POST, 'pw', NULL);
+        if($name !== NULL && $email !== NULL && $pw !== NULL) {
+            $conn = openDb();
+            saveInDb($conn, $email, $name, $pw);
+            closeDb($conn);
+        }
     }
 
 
