@@ -53,14 +53,11 @@ class PageController {
                         $this->model->setPage('home');
                         include_once('./views/HomeDoc.php');
                         $view = new HomeDoc($this->model);
-                    } else {
-                        include_once('./views/FormsDoc.php');
-                        $view = new FormsDoc($this->model);
+                        break;
                     }
-                } else {
-                    include_once('./views/FormsDoc.php');
-                    $view = new FormsDoc($this->model);
                 }
+                include_once('./views/FormsDoc.php');
+                $view = new FormsDoc($this->model);
                 break;
             
             case 'logout':
@@ -76,6 +73,21 @@ class PageController {
                 include_once('./models/UserModel.php');
                 $this->model = new UserModel();
                 $this->getRequest();
+                if($this->model->getIsPost()) {
+                    if($this->model->getValid()) {
+                        $name = getVarFromArray($_POST, 'name', NULL);
+                        $email = getVarFromArray($_POST, 'email', NULL);
+                        $pw = getVarFromArray($_POST, 'pw', NULL);
+                        if($name !== NULL && $email !== NULL && $pw !== NULL) {
+                            $conn = openDb();
+                            saveInDb($conn, $email, $name, $pw);
+                            closeDb($conn);
+                        }
+                        $_POST['page'] = 'login';
+                        $this->getRequest();
+                    }
+                }
+                
                 $view = new FormsDoc($this->model);
                 break;
             
