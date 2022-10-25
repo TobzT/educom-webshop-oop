@@ -27,9 +27,9 @@ class CartDoc extends ProductDoc {
             $this->startCartLine();
             $this->showCartItem('image', $id, $items[$id]['path'], true);
             $this->showCartItem('name', $id, $items[$id]['name']);
-            $this->showCartItem('price', $id, '€ ' . round($items[$id]['price'], 2)); 
+            $this->showCartItem('price', $id, '€ ' . round($items[$id]['price'] / 100, 2)); 
             $this->showCartItem('count', $id, $this->showCountForm($count, $id));
-            $subtotal = round((int)$count * (float)$items[$id]['price'], 2);
+            $subtotal = round(((int)$count * (int)$items[$id]['price']) / 100, 2);
             $this->showCartItem('subtotal', $id, '€ ' . round($subtotal, 2));
             $this->showCartItem('remove', $id, $this->showRemoveButton($id));
             

@@ -8,7 +8,7 @@ class DetailDoc extends ProductDoc {
         $item = $this->sortWebshopResults($item);
         $this->startGrid('detailgrid');
         echo('<div class="detailtitle"><h1>'.$item[$id]['name'].'</h1></div>');
-        echo('<div class="detailprice"><p>€'.round($item[$id]['price'], 2).'</p> 
+        echo('<div class="detailprice"><p>€'.round($item[$id]['price'] / 100, 2).'</p> 
             <form method="post" action="index.php">
             <input type="hidden" name="id" value="'.$item[$id]['id'].'">
             <input type="hidden" name="type" value="details">
