@@ -11,12 +11,16 @@ class PageController {
 
     public function handleRequest() {
         $this->getRequest();
-
+        // $this->processRequest();
         $this->showPage();
     }
 
     private function getRequest() {
         $this->model->getRequestedPage();
+    }
+
+    private function processRequest() {
+
     }
 
     private function showPage() {
@@ -37,14 +41,14 @@ class PageController {
             case 'contact':
                 include_once('./views/FormsDoc.php');
                 include_once('./models/UserModel.php');
-                $this->model = new UserModel();
+                $this->model = new UserModel($this->model);
                 $this->getRequest();
                 $view = new FormsDoc($this->model);
                 break;
 
             case 'login':
                 include_once('./models/UserModel.php');
-                $this->model = new UserModel();
+                $this->model = new UserModel($this->model);
                 $this->getRequest();
                 if($this->model->getIsPost()) {
                     if($this->model->getValid()) {
@@ -71,7 +75,7 @@ class PageController {
             case 'register':
                 include_once('./views/FormsDoc.php');
                 include_once('./models/UserModel.php');
-                $this->model = new UserModel();
+                $this->model = new UserModel($this->model);
                 $this->getRequest();
                 if($this->model->getIsPost()) {
                     if($this->model->getValid()) {
@@ -103,7 +107,7 @@ class PageController {
                     $this->model->setPage('webshop');
                     $_GET['id'] = $id;
                 }
-                $this->model = new ShopModel();
+                $this->model = new ShopModel($this->model);
                 $this->getRequest();
                 $view = new WebshopDoc($this->model);
                 break;
@@ -112,7 +116,7 @@ class PageController {
                 include_once('./views/DetailDoc.php');
                 include_once('./models/ShopModel.php');
                 
-                $this->model = new ShopModel();
+                $this->model = new ShopModel($this->model);
                 $this->getRequest();
                 
                 $view = new DetailDoc($this->model);
@@ -120,7 +124,7 @@ class PageController {
 
             case "cart":
                 include_once('./models/ShopModel.php');
-                $this->model = new ShopModel();
+                $this->model = new ShopModel($this->model);
                 $this->getRequest();
                 if($this->model->getIsPost()){
                     $type = getVarFromArray($_POST, 'type', NULL);

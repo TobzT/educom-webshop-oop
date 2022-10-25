@@ -8,12 +8,20 @@ class PageModel {
     protected $sideMenu = array();
     protected $sessionManager;
 
-    // public function __construct() {
-    //     $this->getRequestedPage();
-    // }
+    public function __construct($copy) {
+        if(empty($copy)) {
+            $this->sessionManager = new SessionManager();
+        } else {
+            $this->page = $copy->getPage();
+            $this->isPost = $copy->getIsPost();
+            $this->menu = $copy->getMenu();
+            $this->sideMenu = $copy->getSideMenu();
+            $this->sessionManager = $copy->getSessionManager();
+        }
+        
+    }
 
     public function getRequestedPage() {
-        $this->sessionManager = new SessionManager();
         $request_type = $_SERVER["REQUEST_METHOD"];
         
         $this->isPost = $request_type == "POST";
@@ -46,6 +54,10 @@ class PageModel {
 
     public function getIsPost() {
         return $this->isPost;
+    }
+
+    public function getSessionManager() {
+        return $this->sessionManager;
     }
 
     protected function createMenuArr() {

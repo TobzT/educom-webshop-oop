@@ -7,6 +7,11 @@ class ShopModel extends PageModel {
     protected $items;
     protected $id;
 
+
+    public function __construct($copy) {
+        PARENT::__construct($copy);
+
+    }
     public function getRequestedPage() {
         $this->sessionManager = new SessionManager();
         $request_type = $_SERVER["REQUEST_METHOD"];

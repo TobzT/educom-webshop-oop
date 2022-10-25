@@ -10,7 +10,9 @@ class UserModel extends PageModel {
     protected $values = array();
     protected $valid = true;
 
-
+    public function __construct($copy) {
+        PARENT::__construct($copy);
+    }
 
     public function getRequestedPage() {
 

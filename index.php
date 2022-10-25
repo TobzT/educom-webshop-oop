@@ -32,7 +32,7 @@ date_default_timezone_set('CET');
 session_check();
 // var_dump($_SESSION);
 if (USE_MVC) {
-    $model = new PageModel();
+    $model = new PageModel(NULL);
     $controller = new PageController($model);
     $controller->handleRequest();
 } else {
