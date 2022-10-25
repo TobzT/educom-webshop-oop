@@ -3,7 +3,7 @@ require_once('./views/ProductDoc.php');
 class DetailDoc extends ProductDoc {
 
     private function showDetails() {
-        $id = $this->model->getId();
+        $id = (int)$this->model->getId();
         $item = $this->model->getItems();
         $item = $this->sortWebshopResults($item);
         $this->startGrid('detailgrid');
@@ -13,7 +13,7 @@ class DetailDoc extends ProductDoc {
             <input type="hidden" name="id" value="'.$item[$id]['id'].'">
             <input type="hidden" name="type" value="details">
             <input type="hidden" name="count" value="1">
-            <input type="hidden" name="page" value="cart">
+            <input type="hidden" name="page" value="details">
             <button id="details" type="submit">add to cart</button></form></div>');
         echo('<div class="detaildesc"><p>'.$item[$id]['desc'].'</p> </div>');
         echo('<div class="detailimg"><img src='.$item[$id]['path'].'></div>');

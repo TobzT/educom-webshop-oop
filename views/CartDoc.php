@@ -27,10 +27,10 @@ class CartDoc extends ProductDoc {
             $this->startCartLine();
             $this->showCartItem('image', $id, $items[$id]['path'], true);
             $this->showCartItem('name', $id, $items[$id]['name']);
-            $this->showCartItem('price', $id, '€ ' . round($items[$id]['price'] / 100, 2)); 
+            $this->showCartItem('price', $id, '€ ' . round(($items[$id]['price'] / 100), 2)); 
             $this->showCartItem('count', $id, $this->showCountForm($count, $id));
-            $subtotal = round(((int)$count * (int)$items[$id]['price']) / 100, 2);
-            $this->showCartItem('subtotal', $id, '€ ' . round($subtotal, 2));
+            $subtotal = round((int)$count * ((int)$items[$id]['price']), 2);
+            $this->showCartItem('subtotal', $id, '€ ' . round($subtotal / 100, 2));
             $this->showCartItem('remove', $id, $this->showRemoveButton($id));
             
             $this->stopCartLine();
@@ -72,7 +72,7 @@ class CartDoc extends ProductDoc {
     private function showTotal($total) {
         $this->startCartLine();
         $this->showCartItem('rest');
-        $this->showCartItem('total', NULL, '€ ' . round($total, 2));
+        $this->showCartItem('total', NULL, '€ ' . round($total / 100, 2));
         $this->showCartItem('remove');
         $this->stopCartLine();
     }
@@ -84,6 +84,7 @@ class CartDoc extends ProductDoc {
         echo('<form method="post" action="index.php">');
         echo('<input type="hidden" name="type" value="order">');
         echo('<input type="hidden" name="page" value="cart">');
+        echo('<input type="hidden" name="id" value="1">');
         echo('<input type="hidden" name="total" value="'.$total.'">');
         echo('<button type="submit">Order</button>');
         echo('</form>');

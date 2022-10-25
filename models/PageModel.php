@@ -62,7 +62,15 @@ class PageModel {
     }
 
     public function refreshMenu() {
-        return $this->createMenuArr();
+        $this->createMenuArr();
+    }
+
+    public function cleanCart() {
+        foreach($_SESSION['cart'] as $id => $count) {
+            if($count < 1) {
+                unset($_SESSION['cart'][$id]);
+            }
+        }
     }
 
     

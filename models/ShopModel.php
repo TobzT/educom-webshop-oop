@@ -10,6 +10,7 @@ class ShopModel extends PageModel {
 
     public function __construct($copy) {
         PARENT::__construct($copy);
+        $this->setItems();
 
     }
     public function getRequestedPage() {
@@ -37,6 +38,10 @@ class ShopModel extends PageModel {
         return $this->id;
     }
 
+    public function setId($id) {
+        $this->id = $id;
+    }
+
     private function setItems() {
         $conn = openDb();
         switch($this->page) {
@@ -44,7 +49,14 @@ class ShopModel extends PageModel {
                 $this->items = getAllItemsFromDb($conn);
                 break;
             case "details":
-                $this->id = $this->getVarFromArray($_GET, 'id', '1');
+                
+                if(empty($this->id)){
+                    if($this->getIsPost()){
+                        $this->id = (int)$this->getVarFromArray($_POST, 'id', 1);
+                    } else {
+                        $this->id = (int)$this->getVarFromArray($_GET, 'id', 1);
+                    }
+                }
                 $this->items = getItemFromDb($conn, $this->id);
                 break;
             case "cart":

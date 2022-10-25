@@ -65,7 +65,9 @@ class UserModel extends PageModel {
     }
 
 
-
+    public function refreshMetaData() {
+        $this->setMetaData();
+    }
 
     private function setMetaData() {
         switch($this->page) {

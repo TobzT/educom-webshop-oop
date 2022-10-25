@@ -16,10 +16,6 @@ class WebshopDoc extends ProductDoc {
     }
 
     protected function showItems() {
-        
-        if(count($this->items) < 1){
-            // TODO ERROR
-        }
         $this->startGrid('shopGrid');
         
         foreach($this->items as $item) {

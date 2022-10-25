@@ -43,6 +43,7 @@ class PageController {
                 if($this->model->getValid()) {
                     $this->model->registerUser();
                     $this->model->setPage('login');
+                    $this->model->refreshMetaData();
                 }
                 break;
 
@@ -55,10 +56,91 @@ class PageController {
                 }
                 break;
             
-            case 'contactThanks':
-                print_r('hello world');
+            case "logout":
+                $this->model->doLogOut();
+                $this->model->refreshMenu();
+                $this->model->setPage('home');
                 break;
-        }
+
+            case "webshop":
+                include_once('./models/ShopModel.php');
+                $this->model = new ShopModel($this->model);
+                
+                $id = getVarFromArray($_POST, 'id', NULL);
+                $count = getVarFromArray($_POST, 'count', 0);
+                if($id !== NULL && $count !== 0) {
+                    addToCart($id, $count);
+                }
+                break;
+
+            case "details":
+                include_once('./models/ShopModel.php');
+                $this->model = new ShopModel($this->model);
+                $id = getVarFromArray($_POST, 'id', NULL);
+                $count = getVarFromArray($_POST, 'count', 0);
+                if($id !== NULL && $count !== 0) {
+                    addToCart($id, $count);
+                    $this->model->setId($id);
+                }
+                
+                break;
+
+            case "cart":
+                include_once('./models/ShopModel.php');
+                $this->model = new ShopModel($this->model);
+                $type = getVarFromArray($_POST, 'type', 0);
+                $id = (int)getVarFromArray($_POST, 'id', 0);
+                if($id !== 0 && $type !== 0) {
+                    switch($type) {
+                        // case "details":
+                        //     if($this->model->getIsPost()) {
+                        //         $id = (int)getVarFromArray($_POST, 'id', 0);
+                        //         $count = (int)getVarFromArray($_POST, 'count', 0);
+                        //         if($id !== 0 && $count !== 0) {
+                        //             addToCart($id, $count);
+                        //         }
+                        //         $this->model->setPage('details');
+                        //         $this->model->setId($id);
+                        //         break;
+                        //     }
+                        
+                        case "remove":
+                            $_SESSION['cart'][$id] = 0;
+                            $this->model->cleanCart();
+                            break;
+                        
+                        case "count":
+                            $value = getVarFromArray($_POST, 'value', NULL);
+                            $_SESSION['cart'][$id] = $value;
+                            break;
+                        
+                        case "order":
+                            $totalPrice = getVarFromArray($_POST, 'total', 0);
+                            
+                            $ids = array_keys($_SESSION['cart']);
+                            $conn = openDb();
+                            
+                            $result = getItemsFromDb($conn, $ids);
+                            $results = sortWebshopResults($result);
+                            
+                            $order = '';
+                            foreach($ids as $id) {
+                                $count = $_SESSION['cart'][$id];
+                                $price = $results[$id]['price'];
+                                $order .= $id . '|' . $count . '|' . $price . ':';
+    
+                            }
+                            $user = findByName($conn, $_SESSION['username']);
+                            $userId = $user[0][0];
+                            saveInOrders($conn, $userId, $order, $totalPrice);
+                            clearCart();
+                            cleanCart();
+                            closeDb($conn);
+                            $this->model->setPage('confirmOrder');
+                            break;
+                    }
+                } 
+        }   
     }
 
     
@@ -95,131 +177,42 @@ class PageController {
             
             case 'logout':
                 include_once('./views/HomeDoc.php');
-                $this->model->doLogOut();
-                $this->getRequest();
-                $this->model->setPage('home');
                 $view = new HomeDoc($this->model);
                 break;
 
             case 'register':
                 include_once('./views/FormsDoc.php');
-                include_once('./models/UserModel.php');
-                $this->model = new UserModel($this->model);
-                $this->getRequest();
-                // if($this->model->getIsPost()) {
-                //     if($this->model->getValid()) {
-                //         $name = getVarFromArray($_POST, 'name', NULL);
-                //         $email = getVarFromArray($_POST, 'email', NULL);
-                //         $pw = getVarFromArray($_POST, 'pw', NULL);
-                //         if($name !== NULL && $email !== NULL && $pw !== NULL) {
-                //             $conn = openDb();
-                //             saveInDb($conn, $email, $name, $pw);
-                //             closeDb($conn);
-                //         }
-                //         $_POST['page'] = 'login';
-                //         $this->getRequest();
-                //     }
-                // }
-                
                 $view = new FormsDoc($this->model);
                 break;
             
             case 'webshop':
                 include_once('./views/WebshopDoc.php');
-                include_once('./models/ShopModel.php');
-                if($this->model->getIsPost()) {
-                    $id = (int)getVarFromArray($_POST, 'id', 0);
-                    $count = (int)getVarFromArray($_POST, 'count', 0);
-                    if($id !== NULL && $count !== 0) {
-                        addToCart($id, $count);
-                    }
-                    $this->model->setPage('webshop');
-                    $_GET['id'] = $id;
-                }
-                $this->model = new ShopModel($this->model);
-                $this->getRequest();
                 $view = new WebshopDoc($this->model);
                 break;
             
             case "details":
                 include_once('./views/DetailDoc.php');
-                include_once('./models/ShopModel.php');
-                
-                $this->model = new ShopModel($this->model);
-                $this->getRequest();
-                
                 $view = new DetailDoc($this->model);
                 break;
 
             case "cart":
-                include_once('./models/ShopModel.php');
-                $this->model = new ShopModel($this->model);
-                $this->getRequest();
-                if($this->model->getIsPost()){
-                    $type = getVarFromArray($_POST, 'type', NULL);
-                    $id = (int)getVarFromArray($_POST, 'id', 0);
-
-                    switch($type) {
-                        case "details":
-                            if($this->model->getIsPost()) {
-                                $id = (int)getVarFromArray($_POST, 'id', 0);
-                                $count = (int)getVarFromArray($_POST, 'count', 0);
-                                if($id !== NULL && $count !== 0) {
-                                    addToCart($id, $count);
-                                }
-                                $this->model->setPage('details');
-                                $_GET['id'] = $id;
-                                break;
-                            }
-
-                        case "remove":
-                            $_SESSION['cart'][$id] = 0;
-                            break;
-    
-                        case "count":
-                            $value = getVarFromArray($_POST, 'value', NULL);
-                            $_SESSION['cart'][$id] = $value;
-                            break;
-                        
-                        case "order":
-                            $totalPrice = getVarFromArray($_POST, 'total', 0);
-                            
-                            $ids = array_keys($_SESSION['cart']);
-                            $conn = openDb();
-                            
-                            $result = getItemsFromDb($conn, $ids);
-                            $results = sortWebshopResults($result);
-                            
-                            $order = '';
-                            foreach($ids as $id) {
-                                $count = $_SESSION['cart'][$id];
-                                $price = $results[$id]['price'];
-                                $order .= $id . '|' . $count . '|' . $price . ':';
-    
-                            }
-                            $user = findByName($conn, $_SESSION['username']);
-                            $userId = $user[0][0];
-                            saveInOrders($conn, $userId, $order, $totalPrice);
-                            clearCart();
-                            cleanCart();
-                            closeDb($conn);
-                            $this->model->setPage('confirmOrder');
-                            break;
-                    }
+                if(!checkCart()) {
+                    include_once('./views/EmptyCartDoc.php');
+                    $view = new EmptyCartDoc($this->model);
+                } else {
+                    include_once('./views/CartDoc.php');
+                    $view = new CartDoc($this->model);
                 }
-                    
-                    if(!checkCart()) {
-                        include_once('./views/EmptyCartDoc.php');
-                        $view = new EmptyCartDoc($this->model);
-                    } else {
-                        include_once('./views/CartDoc.php');
-                        $view = new CartDoc($this->model);
-                    }
-                    break;
-                }
-
-                $view->show();
+                break;
+            
+            case "confirmOrder":
+                include_once('./views/ConfirmOrderDoc.php');
+                $view = new ConfirmOrderDoc($this->model);
+                break;
             }
+
+            $view->show();
+        }
         
             private function session_check() {
                 if ($_SESSION['lastUsed'] !== NULL){
