@@ -207,6 +207,17 @@ class UserModel extends PageModel {
         
     }
 
+    public function registerUser() {
+        
+        $name = $this->getVarFromArray($_POST, 'name', NULL);
+        $email = $this->getVarFromArray($_POST, 'email', NULL);
+        $pw = $this->getVarFromArray($_POST, 'pw', NULL);
+        if($name !== NULL && $email !== NULL && $pw !== NULL) {
+            $conn = openDb();
+            saveInDb($conn, $email, $name, $pw);
+            closeDb($conn);
+        }
+    }
     
 }
 

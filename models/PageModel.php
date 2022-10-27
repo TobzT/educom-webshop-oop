@@ -7,6 +7,7 @@ class PageModel {
     protected $menu = array();
     protected $sideMenu = array();
     protected $sessionManager;
+    protected $crud;
 
     public function __construct($copy) {
         if(empty($copy)) {
@@ -17,6 +18,7 @@ class PageModel {
             $this->menu = $copy->getMenu();
             $this->sideMenu = $copy->getSideMenu();
             $this->sessionManager = $copy->getSessionManager();
+            $this->crud = $copy->getCrud();
         }
         
     }
@@ -65,6 +67,10 @@ class PageModel {
         $this->createMenuArr();
     }
 
+    public function getCrud() {
+        return $this->crud;
+    }
+
     public function cleanCart() {
         foreach($_SESSION['cart'] as $id => $count) {
             if($count < 1) {
@@ -94,30 +100,14 @@ class PageModel {
     }
 
     public function doLogIn() {
-        $conn = openDb();
-        $_SESSION['username'] = findByEmail($conn, $this->getVarFromArray($_POST, 'email', NULL))[0][2];
-        $_SESSION['lastUsed'] = date('Y:m:t-H:m:s');
-        $_SESSION['cart'] = array();
-        closeDb($conn);
+        $this->sessionManager->doLogIn();
     }
 
     public function doLogOut() {
-        $_SESSION['username'] = NULL;
-        $_SESSION['lastUsed'] = NULL;
-        $_SESSION['cart'] = NULL;
+        $this->sessionManager->doLogOut();
     }
 
-    public function registerUser() {
-        
-        $name = getVarFromArray($_POST, 'name', NULL);
-        $email = getVarFromArray($_POST, 'email', NULL);
-        $pw = getVarFromArray($_POST, 'pw', NULL);
-        if($name !== NULL && $email !== NULL && $pw !== NULL) {
-            $conn = openDb();
-            saveInDb($conn, $email, $name, $pw);
-            closeDb($conn);
-        }
-    }
+    
 
 
 }

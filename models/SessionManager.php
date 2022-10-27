@@ -1,6 +1,6 @@
 <?php 
-
-class SessionManager {
+include_once("./models/PageModel.php");
+class SessionManager extends PageModel {
 
     public function isLoggedIn() {
         return isset($_SESSION['username']);
