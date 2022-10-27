@@ -7,7 +7,6 @@ class Crud {
     public function __construct() {
         $this->pdo = new PDO($this->connstring, $this->username, $this->password);
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        // echo($this->pdo);
     }
     
     public function createRow($sql, $params) {
@@ -37,7 +36,7 @@ class Crud {
         }
         $statement->setFetchMode(PDO::FETCH_OBJ);
         $statement->execute();
-        return $statement->fetch();
+        return $statement->fetchAll();
     }
 
     public function updateRow($sql, $params) {
@@ -51,8 +50,8 @@ class Crud {
     }
 }
 
-$crud = new Crud();
-$sql = "SELECT * FROM users WHERE id = :id";
-$params = array(":id" => 12);
-print_r($crud->readOneRow($sql, $params));
+// $crud = new Crud();
+// $sql = 'UPDATE users SET name = :name WHERE id = :id';
+// $params = array(":name" => "TOBZZZZ", ":id" => 29);
+// print_r($crud->updateRow($sql, $params));
 ?>
