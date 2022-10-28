@@ -1,5 +1,6 @@
 <?php 
 include_once('./models/PageModel.php');
+include_once('./3 Data/ShopCrud.php');
 include_once('./3 Data/data.php');
 
 class ShopModel extends PageModel {
@@ -10,6 +11,7 @@ class ShopModel extends PageModel {
 
     public function __construct($copy) {
         PARENT::__construct($copy);
+        $this->crud = new ShopCrud($this->crud);
         $this->setItems();
 
     }
@@ -43,10 +45,9 @@ class ShopModel extends PageModel {
     }
 
     private function setItems() {
-        $conn = openDb();
         switch($this->page) {
             case "webshop":
-                $this->items = getAllItemsFromDb($conn);
+                $this->items = $this->crud->readAllShopItems();
                 break;
             case "details":
                 
@@ -57,19 +58,18 @@ class ShopModel extends PageModel {
                         $this->id = (int)$this->getVarFromArray($_GET, 'id', 1);
                     }
                 }
-                $this->items = getItemFromDb($conn, $this->id);
+                $this->items = $this->crud->readOneShopItem($this->id);
                 break;
             case "cart":
                 if(!empty($_SESSION['cart'])) {
                     $ids = array_keys($_SESSION['cart']);
-                    $this->items = getItemsFromDb($conn, $ids);
+                    $this->items = $this->crud->readManyShopItems($ids);
                 } else {
                     $this->items = NULL;
                 }
                 
                 break;
         }
-        closeDb($conn);
     }
 
 }

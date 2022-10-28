@@ -57,7 +57,7 @@ class PageController {
                 break;
             
             case "logout":
-                $this->model->doLogOut();
+                $this->model->sessionManager->doLogOut();
                 $this->model->refreshMenu();
                 $this->model->setPage('home');
                 break;
@@ -66,20 +66,20 @@ class PageController {
                 include_once('./models/ShopModel.php');
                 $this->model = new ShopModel($this->model);
                 
-                $id = getVarFromArray($_POST, 'id', NULL);
-                $count = getVarFromArray($_POST, 'count', 0);
+                $id = $this->getVarFromArray($_POST, 'id', NULL);
+                $count = $this->getVarFromArray($_POST, 'count', 0);
                 if($id !== NULL && $count !== 0) {
-                    addToCart($id, $count);
+                    $this->model->sessionManager->addToCart($id, $count);
                 }
                 break;
 
             case "details":
                 include_once('./models/ShopModel.php');
                 $this->model = new ShopModel($this->model);
-                $id = getVarFromArray($_POST, 'id', NULL);
-                $count = getVarFromArray($_POST, 'count', 0);
+                $id = $this->getVarFromArray($_POST, 'id', NULL);
+                $count = $this->getVarFromArray($_POST, 'count', 0);
                 if($id !== NULL && $count !== 0) {
-                    addToCart($id, $count);
+                    $this->model->sessionManager->addToCart($id, $count);
                     $this->model->setId($id);
                 }
                 
@@ -88,14 +88,14 @@ class PageController {
             case "cart":
                 include_once('./models/ShopModel.php');
                 $this->model = new ShopModel($this->model);
-                $type = getVarFromArray($_POST, 'type', 0);
-                $id = (int)getVarFromArray($_POST, 'id', 0);
+                $type = $this->getVarFromArray($_POST, 'type', 0);
+                $id = (int)$this->getVarFromArray($_POST, 'id', 0);
                 if($id !== 0 && $type !== 0) {
                     switch($type) {
                         // case "details":
                         //     if($this->model->getIsPost()) {
-                        //         $id = (int)getVarFromArray($_POST, 'id', 0);
-                        //         $count = (int)getVarFromArray($_POST, 'count', 0);
+                        //         $id = (int)$this->getVarFromArray($_POST, 'id', 0);
+                        //         $count = (int)$this->getVarFromArray($_POST, 'count', 0);
                         //         if($id !== 0 && $count !== 0) {
                         //             addToCart($id, $count);
                         //         }
@@ -110,12 +110,12 @@ class PageController {
                             break;
                         
                         case "count":
-                            $value = getVarFromArray($_POST, 'value', NULL);
+                            $value = $this->getVarFromArray($_POST, 'value', NULL);
                             $_SESSION['cart'][$id] = $value;
                             break;
                         
                         case "order":
-                            $totalPrice = getVarFromArray($_POST, 'total', 0);
+                            $totalPrice = $this->getVarFromArray($_POST, 'total', 0);
                             
                             $ids = array_keys($_SESSION['cart']);
                             $conn = openDb();
@@ -133,8 +133,8 @@ class PageController {
                             $user = findByName($conn, $_SESSION['username']);
                             $userId = $user[0][0];
                             saveInOrders($conn, $userId, $order, $totalPrice);
-                            clearCart();
-                            cleanCart();
+                            $this->model->sessionManager->clearCart();
+                            $this->model->sessionManager->cleanCart();
                             closeDb($conn);
                             $this->model->setPage('confirmOrder');
                             break;
@@ -146,7 +146,6 @@ class PageController {
     
 
     private function showPage() {
-        // $page = getVarFromArray($_GET, 'page', 'home');
         $page = $this->model->getPage();
 
         switch($page) {
@@ -233,6 +232,11 @@ class PageController {
                     doLogout();
                     return;
                 }
+            }
+
+            private function getVarFromArray($array, $key, $default = NULL) {
+                return isset($array[$key]) ? $array[$key] : $default;
+                
             }
 }
 

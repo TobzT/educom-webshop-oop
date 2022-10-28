@@ -6,12 +6,13 @@ class PageModel {
     protected $isPost;
     protected $menu = array();
     protected $sideMenu = array();
-    protected $sessionManager;
+    public $sessionManager;
     protected $crud;
 
-    public function __construct($copy) {
-        if(empty($copy)) {
+    public function __construct($copy, $crud=NULL) {
+        if(empty($copy) Or $crud !== NULL) {
             $this->sessionManager = new SessionManager();
+            $this->crud = $crud;
         } else {
             $this->page = $copy->getPage();
             $this->isPost = $copy->getIsPost();

@@ -90,7 +90,7 @@ function doLogOut() {
 }
 
 function session_check() {
-    if ($_SESSION['lastUsed'] !== NULL){
+    if (isset($_SESSION['lastUsed'])){
         $currentDate = explode("-", date('Y:m:t-H:m:s'));
         $currentTime = $currentDate[1];
         $currentDay = $currentDate[0];

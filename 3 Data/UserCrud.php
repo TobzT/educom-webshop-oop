@@ -16,7 +16,7 @@ class UserCrud {
         return true;
     }
 
-    public function readUserMyEmail($email) {
+    public function readUserByEmail($email) {
         $params = get_defined_vars();
         $sql = "SELECT * FROM users WHERE email = :email;";
         return $this->crud->readOneRow($sql, $params);
@@ -32,16 +32,21 @@ class UserCrud {
     public function updateUser($id, $name=NULL, $email=NULL, $pw=NULL) {
         $params = get_defined_vars();
         $extraSql = "";
-        // $params = array(":id" => $id, ":name" => $name, ":email = ")
         foreach($params as $key => $value) {
             if($key !== "id" && $value !== NULL) {
-                $extraSql .= $key . " = " . ":" .$key . " ";
+                
+                $extraSql .= $key . " = " . ":" .$key . ", ";
+                
+            } else {
+                if($key == "id") { continue; }
+                else { unset($params[$key]); }
             }
         }
         if($extraSql == "") {
             return false;
         }
-        $sql = "UPDATE users SET " . $extraSql . "WHERE id = :id";
+        $extraSql = substr($extraSql, 0, strlen($extraSql) - 2) . " ";
+        $sql = "UPDATE users SET " . $extraSql . "WHERE id = :id;";
         
         $this->crud->updateRow($sql, $params);
         return true;
@@ -52,6 +57,7 @@ class UserCrud {
         $params = get_defined_vars();
         $sql = "DELETE FROM users WHERE id = :id";
         $this->crud->deleteRow($sql, $params);
+        return true;
     }
 
 

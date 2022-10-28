@@ -25,11 +25,11 @@ class CartDoc extends ProductDoc {
     private function cartLine($items, $id, $count) {
         if($count > 0) {
             $this->startCartLine();
-            $this->showCartItem('image', $id, $items[$id]['path'], true);
-            $this->showCartItem('name', $id, $items[$id]['name']);
-            $this->showCartItem('price', $id, '€ ' . round(($items[$id]['price'] / 100), 2)); 
+            $this->showCartItem('image', $id, $items[$id]->path, true);
+            $this->showCartItem('name', $id, $items[$id]->name);
+            $this->showCartItem('price', $id, '€ ' . round(($items[$id]->price / 100), 2)); 
             $this->showCartItem('count', $id, $this->showCountForm($count, $id));
-            $subtotal = round((int)$count * ((int)$items[$id]['price']), 2);
+            $subtotal = round((int)$count * ((int)$items[$id]->price), 2);
             $this->showCartItem('subtotal', $id, '€ ' . round($subtotal / 100, 2));
             $this->showCartItem('remove', $id, $this->showRemoveButton($id));
             
@@ -67,6 +67,14 @@ class CartDoc extends ProductDoc {
             echo('<div class="cartItem" id="'.$cssId.'">'.$value.'</div>');
         }
     
+    }
+
+    protected function sortWebshopResults($items) {
+        $items2 = array();
+        foreach($items as $item) {
+            $items2[$item->id] = $item;
+        }
+        return $items2;
     }
 
     private function showTotal($total) {

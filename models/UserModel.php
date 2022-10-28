@@ -1,6 +1,7 @@
 <?php 
 include_once('./models/PageModel.php');
-include_once('./3 Data/data.php');
+include_once('./3 Data/UserCrud.php');
+// include_once('./3 Data/data.php');
 
 class UserModel extends PageModel {
     
@@ -12,6 +13,7 @@ class UserModel extends PageModel {
 
     public function __construct($copy) {
         PARENT::__construct($copy);
+        $this->crud = new UserCrud($this->crud);
         $this->setMetaData();
     }
 
@@ -112,7 +114,7 @@ class UserModel extends PageModel {
             $this->errors = NULL;
             foreach($this->meta as $key => $metaArray) {
                 
-                $this->values[$key] = test_inputs(getVarFromArray($_POST, $key));
+                $this->values[$key] = test_inputs($this->getVarFromArray($_POST, $key));
                 $this->validateField($key);
             }
         }
@@ -176,9 +178,9 @@ class UserModel extends PageModel {
                         }
                         break;
                     case 'correctPassword':
-                        $pwInDb = findByEmail($conn, strtolower(getVarFromArray($_POST, 'email')));
-                        if(count($pwInDb) > 0 ){
-                            $pwInDb = test_inputs($pwInDb[0][3]);
+                        $pwInDb = $this->crud->readUserByEmail(strtolower(getVarFromArray($_POST, 'email')))->pw;
+                        if(strlen($pwInDb) > 0 ) {
+                            $pwInDb = test_inputs($pwInDb);
                         } else {
                             $this->valid = false;
                             $this->errors[$key] = 'Deze gebruiker is niet bekend.';

@@ -25,11 +25,11 @@ class WebshopDoc extends ProductDoc {
     }
 
     protected function showItem($item) {
-        echo('<a id="normal" href="index.php?page=details&id='.$item[0].'">');
-        $title = $this->showShopItemComp('shopTitle', $this->showDiv('center', 'fillbox normal', '<h3>'.$item[1].'</h3>'));
-        $body = $this->showShopItemComp('shopImg', $this->showImg('fillbox', $item[4])); //showImg('fillbox', $item[4])
+        echo('<a id="normal" href="index.php?page=details&id='.$item->id.'">');
+        $title = $this->showShopItemComp('shopTitle', $this->showDiv('center', 'fillbox normal', '<h3>'.$item->name.'</h3>'));
+        $body = $this->showShopItemComp('shopImg', $this->showImg('fillbox', $item->path)); //showImg('fillbox', $item[4])
         $button_1 = '<form method="post" action="index.php">
-                    <input type="hidden" name="id" value="'.$item[0].'">
+                    <input type="hidden" name="id" value="'.$item->id.'">
                     <input type="hidden" name="type" value="webshop">
                     <input type="hidden" name="count" value="1">
                     <input type="hidden" name="page" value="webshop">

@@ -2,7 +2,7 @@
 class Crud {
     private $pdo;
     private $statement;
-    private $connstring = "mysql:host=localhost;dbname=tobias_webshop;";
+    private $connstring = "mysql:host=127.0.0.1;dbname=tobias_webshop;";
     private $username = "tobias_webshop";
     private $password = "EducomCheeta";
     public function __construct() {
@@ -27,15 +27,15 @@ class Crud {
     }
 
     public function readManyRows($sql, $params) {
-        $this->prepareAndBind($sql, $params);
+        $this->prepareAndBind2($sql, $params);
         $this->statement->execute();
-        return $this->statement->fetchAll();
+        return $this->statement->fetchAll(PDO::FETCH_CLASS);
     }
 
     public function readAllRows($sql) {
         $this->statement = $this->pdo->prepare($sql);
         $this->statement->execute();
-        return $this->statement->fetchAll();
+        return $this->statement->fetchAll(PDO::FETCH_CLASS);
     }
 
     public function updateRow($sql, $params) {
@@ -50,10 +50,21 @@ class Crud {
         return true;
     }
 
+
+    
     private function prepareAndBind($sql, $params) {
         $this->statement = $this->pdo->prepare($sql);
         foreach($params as $key => $value) {
             $this->statement->bindValue(":".$key, $value);
+        }
+        $this->statement->setFetchMode(PDO::FETCH_OBJ);
+    }
+
+    // when the params array is not properly ordered
+    private function prepareAndBind2($sql, $params) {
+        $this->statement = $this->pdo->prepare($sql);
+        foreach($params as $key => $value) {
+            $this->statement->bindValue($key + 1, $value);
         }
         $this->statement->setFetchMode(PDO::FETCH_OBJ);
     }
